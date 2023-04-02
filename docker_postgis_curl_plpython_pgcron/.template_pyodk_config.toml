@@ -1,0 +1,5 @@
+[central]
+base_url = "https://central.yyyyyy.zz"
+username = "aaa@bbbbbb.org"
+password = "xxxxxxxxxxxxxxxxxx>"
+default_project_id = 1
