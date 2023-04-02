@@ -44,12 +44,13 @@ def fresh_data_only(pid, fid, path, filter, datas):
         datas[tablename]=value
 		
     json_datas = str(json.dumps(datas, indent = 4))
-    return json_datas
-    #return json_datas.encode(encoding='utf-8').decode('unicode_escape')
+    #return json_datas
+    return json_datas.encode(encoding='utf-8').decode('unicode_escape')
 	
 return fresh_data_only(project_id, form_id, 'Submissions', filter, datas = {})
 
 $BODY$;
+
 
 -- FUNCTION: plpyodk.get_attachment_from_central(text, text, text, text, text)
 
@@ -82,6 +83,7 @@ def save_attachment_to_file(pid, fid, sid, attachment, dest_path):
 save_attachment_to_file(project_id,	form_id, submission_id,	attachment,	destination)
 
 $BODY$;
+
 
 -- FUNCTION: plpyodk.dynamic_pivot(text, text, refcursor)
 
@@ -158,7 +160,6 @@ COMMENT ON FUNCTION plpyodk.dynamic_pivot(text, text, refcursor)
 		refcursor';
 
 
-
 -- FUNCTION: plpyodk.create_table_from_refcursor(text, text, refcursor)
 
 -- DROP FUNCTION IF EXISTS plpyodk.create_table_from_refcursor(text, text, refcursor);
@@ -226,6 +227,7 @@ COMMENT ON FUNCTION plpyodk.create_table_from_refcursor(text, text, refcursor)
 	
 	returning :
 	void';
+
 
 -- FUNCTION: plpyodk.insert_into_from_refcursor(text, text, refcursor)
 
@@ -301,7 +303,6 @@ COMMENT ON FUNCTION plpyodk.insert_into_from_refcursor(text, text, refcursor)
 	void';
 
 
-
 -- FUNCTION: plpyodk.feed_data_tables_from_central(text, text, text)
 
 -- DROP FUNCTION IF EXISTS plpyodk.feed_data_tables_from_central(text, text, text);
@@ -373,6 +374,7 @@ query := 'select DISTINCT tablename	FROM '||schema_name||'.'||form_id;
     end loop;
 END;
 $BODY$;
+
 
 -- FUNCTION: plpyodk.does_table_exists(text, text)
 

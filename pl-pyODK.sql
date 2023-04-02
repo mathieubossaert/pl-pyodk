@@ -44,8 +44,8 @@ def fresh_data_only(pid, fid, path, filter, datas):
         datas[tablename]=value
 		
     json_datas = str(json.dumps(datas, indent = 4))
-    return json_datas
-    #return json_datas.encode(encoding='utf-8').decode('unicode_escape')
+    #return json_datas
+    return json_datas.encode(encoding='utf-8').decode('unicode_escape')
 	
 return fresh_data_only(project_id, form_id, 'Submissions', filter, datas = {})
 
