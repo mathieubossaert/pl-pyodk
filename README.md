@@ -61,6 +61,6 @@ SELECT plpyodk.odk_central_to_pg(
 SELECT plpyodk.odk_central_to_pg(5,'waypoint'::text,'odk_central'::text,'','point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text);
 
 ```
-The form definition may be found here :
+The definition of the form used in the above example can be found here :
 
 https://biodiversityforms.org/assets/files/ODKWaypoints-95fef9d5cc12bc1d91dca309fa53a242.xlsx
