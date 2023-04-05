@@ -8,13 +8,12 @@ We can now ask central for the only data that are not already in our database, s
 ```sql
 CREATE OR REPLACE PROCEDURAL LANGUAGE plpython3u;
 ```
-## Example
-### pip install pyodk
+### Install pyodk on the database host
 On the database server
 ```sh
 pip install -U pyodk
 ```
-### pyODK config file
+### Set pyODK config file
 .pyodk_config.toml conf file must exists in Postgresql directory (ie /var/lib/postgresql/)
 Edit the .template_pyodk_config.toml file
 
@@ -25,3 +24,5 @@ username = "my_username"
 password = "my_password"
 default_project_id = 5
 ```
+
+## Using the docker iamage for test
