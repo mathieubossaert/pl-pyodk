@@ -19,6 +19,7 @@ pip install -U pyodk
 ```
 ### Set pyODK config file
 Edit the .template_pyodk_config.toml file and save it as .pyodk_config.toml
+
 .pyodk_config.toml conf file must exists in Postgresql directory (ie /var/lib/postgresql/)
 
 
@@ -30,8 +31,8 @@ password = "my_password"
 default_project_id = 5
 ```
 
-## Using the docker image for test
-#### Set pyODK config file
+## Using the docker image for test (only)
+### Set pyODK config file
 
 ```sh
 cd docker_postgis_curl_plpython_pgcron
@@ -39,14 +40,19 @@ cd docker_postgis_curl_plpython_pgcron
 
 Edit the .template_pyodk_config.toml file and save it as .pyodk_config.toml
 
+### Build and run the container
+
 ```sh
 sudo docker build -t postgis:test_pyodk .
 sudo docker run --restart="always" --dns 1.1.1.1 --name test_plpyodk -e POSTGRES_DB=field_data -e POSTGRES_USER=tester -e POSTGRES_PASSWORD=testerpwd -d -p 5555:5432 postgis:test_pyodk
 ```
+### Connect to the database with your prefered client
 
 You can now connect to the **field_data** database on **localhost**, port **5555** with user **tester** and password **testerdb**
 
-And test with the form you want from your central server :
+### Play SQL queries to get datas from Central and do whatever you want with it in your own database.
+
+Test with the form you want from your central server :
 
 ```sql
 /*
