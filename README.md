@@ -53,13 +53,19 @@ And test with the form you want from your central server :
 SELECT plpyodk.odk_central_to_pg(
 	5, 					-- the project id, 
 	'waypoint',			-- form ID
-	'odk_central',		-- schema where to creta tables and store data
-	'fite_to_use'		-- the filter "clause" ao the API Call ex. '__system/submissionDate ge 2023-04-01'. Empty string ('') will get all the datas. 
-	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'	-- columns to ignore in json transformation to database attributes (geojson fields of GeoWidgets)
+	'odk_central',		-- schema where to create tables and store data
+	'fite_to_use'		-- the filter "clause" used in the API call ex. '__system/submissionDate ge 2023-04-01'. Empty string ('') will get all the datas. 
+	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'	-- (geo)columns to ignore in json transformation to database attributes (geojson fields of GeoWidgets)
 );
 */
 
-SELECT plpyodk.odk_central_to_pg(5,'waypoint'::text,'odk_central'::text,'','point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text);
+SELECT plpyodk.odk_central_to_pg(
+	5,						-- the project id
+	'waypoint'::text,		-- form ID
+	'odk_central'::text,	-- schema where to create tables and store data
+	'',						-- the filter "clause" used in the API call
+	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text -- (geo)columns to ignore in json
+);
 
 -- And for example to view the data :
 
