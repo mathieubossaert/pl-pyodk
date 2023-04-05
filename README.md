@@ -18,8 +18,9 @@ On the database server
 pip install -U pyodk
 ```
 ### Set pyODK config file
+Edit the .template_pyodk_config.toml file and save it as .pyodk_config.toml
 .pyodk_config.toml conf file must exists in Postgresql directory (ie /var/lib/postgresql/)
-Edit the .template_pyodk_config.toml file
+
 
 ```toml
 [central]
@@ -29,4 +30,26 @@ password = "my_password"
 default_project_id = 5
 ```
 
-## Using the docker iamage for test
+## Using the docker image for test
+#### Set pyODK config file
+
+```sh
+cd docker_postgis_curl_plpython_pgcron
+```
+
+Edit the .template_pyodk_config.toml file and save it as .pyodk_config.toml
+
+```sh
+sudo docker build -t postgis:test_pyodk .
+sudo docker run --restart="always" --dns 1.1.1.1 --name test_plpyodk -e POSTGRES_DB=field_data -e POSTGRES_USER=tester -e POSTGRES_PASSWORD=testerpwd -d -p 5555:5432 postgis:test_pyodk
+```
+
+You can now connect to the field_data database on **localhost**, port **5555** with user **tester** and password **testerdb**
+
+AND test with the form you want from your central server :
+
+```sql
+SELECT plpyodk.odk_central_to_pg2(5,'waypoint'::text,'odk_central'::text,'','point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text);
+
+```
+The form definition may be found here :
