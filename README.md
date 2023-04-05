@@ -77,7 +77,13 @@ WITH last_submission_date AS (
 	SELECT max("submissionDate")::text AS last_known 
 	FROM odk_central.waypoint_submissions_data
 	)
-SELECT plpyodk.odk_central_to_pg(5,'waypoint'::text,'odk_central'::text,concat('__system/submissionDate ge ',last_known),'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text)
+SELECT plpyodk.odk_central_to_pg(
+	5,
+	'waypoint'::text,
+	'odk_central'::text,
+	concat('__system/submissionDate ge ',last_known),
+	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text
+)
 FROM last_submission_date
 ```
 The definition of the form used in the above example can be found here :
