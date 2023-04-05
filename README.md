@@ -46,9 +46,14 @@ Edit the .template_pyodk_config.toml file and save it as .pyodk_config.toml
 sudo docker build -t postgis:test_pyodk .
 sudo docker run --restart="always" --dns 1.1.1.1 --name test_plpyodk -e POSTGRES_DB=field_data -e POSTGRES_USER=tester -e POSTGRES_PASSWORD=testerpwd -d -p 5555:5432 postgis:test_pyodk
 ```
-### Connect to the database with your prefered client
+### Connect to the database
 
-You can now connect to the **field_data** database on **localhost**, port **5555** with user **tester** and password **testerdb**
+You can now connect to the database with your favorite client:
+* host = **localhost**
+* port = 5555
+* user = **tester**
+* password = **testerpwd**
+* dbname = **field_data**
 
 ### Play SQL queries to get datas from Central and do whatever you want with it in your own database.
 
