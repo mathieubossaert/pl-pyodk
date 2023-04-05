@@ -53,13 +53,26 @@ And test with the form you want from your central server :
 SELECT plpyodk.odk_central_to_pg(
 	5, 					-- the project id, 
 	'waypoint',			-- form ID
-	'odk_central',				-- schema where to creta tables and store data
+	'odk_central',		-- schema where to creta tables and store data
+	'fite_to_use'		-- the filter "clause" ao the API Call ex. '__system/submissionDate ge 2023-04-01'. Empty string ('') will get all the datas. 
 	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'	-- columns to ignore in json transformation to database attributes (geojson fields of GeoWidgets)
 );
 */
 
 SELECT plpyodk.odk_central_to_pg(5,'waypoint'::text,'odk_central'::text,'','point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text);
 
+-- And for example to view the data :
+
+SELECT * FROM odk_central.waypoint_emplacements_data;
+
+-- or this to get only datas collected since last known submissionDate in the database
+
+WITH last_submission_date AS (
+	SELECT max("submissionDate")::text AS last_known 
+	FROM odk_central.waypoint_submissions_data
+	)
+SELECT plpyodk.odk_central_to_pg(5,'waypoint'::text,'odk_central'::text,concat('__system/submissionDate ge ',last_known),'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text)
+FROM last_submission_date
 ```
 The definition of the form used in the above example can be found here :
 
