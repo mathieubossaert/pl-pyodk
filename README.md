@@ -44,7 +44,8 @@ Edit the .template_pyodk_config.toml file and save it as .pyodk_config.toml
 
 ```sh
 sudo docker build -t postgis:test_pyodk .
-sudo docker run --restart="always" --dns 1.1.1.1 --name test_plpyodk -e POSTGRES_DB=field_data -e POSTGRES_USER=tester -e POSTGRES_PASSWORD=testerpwd -d -p 5555:5432 postgis:test_pyodk
+sudo docker run --restart="always" --dns 1.1.1.1 --name test_plpyodk -e POSTGRES_DB=field_data \ 
+-e POSTGRES_USER=tester -e POSTGRES_PASSWORD=testerpwd -d -p 5555:5432 postgis:test_pyodk
 ```
 ### Connect to the database
 
