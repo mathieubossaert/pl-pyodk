@@ -50,7 +50,7 @@ And test with the form you want from your central server :
 
 ```sql
 /*
-SELECT odk_central.odk_central_to_pg(
+SELECT plpyodk.odk_central_to_pg(
 	5, 					-- the project id, 
 	'waypoint',			-- form ID
 	'odk_central',				-- schema where to creta tables and store data
