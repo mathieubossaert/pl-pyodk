@@ -435,11 +435,11 @@ COMMENT ON FUNCTION plpyodk.does_table_exists(text, text)
 	boolean';
 
 
--- FUNCTION: plpyodk.odk_central_to_pg2(integer, text, text, text, text)
+-- FUNCTION: plpyodk.odk_central_to_pg(integer, text, text, text, text)
 
--- DROP FUNCTION IF EXISTS plpyodk.odk_central_to_pg2(integer, text, text, text, text);
+-- DROP FUNCTION IF EXISTS plpyodk.odk_central_to_pg(integer, text, text, text, text);
 
-CREATE OR REPLACE FUNCTION plpyodk.odk_central_to_pg2(
+CREATE OR REPLACE FUNCTION plpyodk.odk_central_to_pg(
 	project_id integer,
 	form_id text,
 	destination_schema_name text,
