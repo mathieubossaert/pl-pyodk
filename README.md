@@ -1,23 +1,25 @@
 # First version of functions that automatically get data from ODK central using a filter
 -> for example from last submission_date known in the database
 
-Central gives all datas by default.
-We use ODK every day to collect data that goes and is edited in our own GIS database.
-Each day we download hourly a lot of data that are already consolidated into our GIS. It consumes a lot of bandwidth and energy to run, at least too much.
+[ODK Central](https://docs.getodk.org/central-intro/) gives all datas by default.
+We use [ODK Collect](https://docs.getodk.org/collect-intro/)every day to collect data that goes and is edited in our own [PostGIS](https://postgis.net) database.
+Each day we download hourly a lot of data that were already consolidated into our GIS. A amount of bandwith and energy used to to it is consumed for "nothing".
 
-Tnaks to [pyODK](https://getodk.github.io/pyodk/) and pl/python We can now ask central for the only data that are not already in our database, so maybe 30 or 40 submissions instead of 5000 ;-)
+Thanks to [pyODK](https://getodk.github.io/pyodk/) and [pl/python](https://www.postgresql.org/docs/current/plpython.html) we can now ask central for the only data that are not already in our database, so maybe 30 or 40 submissions instead of 5000 ;-)
 
 ## Requirements
 ### pl/python langage installed on you databse
 ```sql
 CREATE OR REPLACE PROCEDURAL LANGUAGE plpython3u;
 ```
-### Install pyodk on the database host
+### Install pyodk library on the database host
+
 On the database server
 ```sh
 pip install -U pyodk
 ```
 ### Set pyODK config file
+
 Edit the .template_pyodk_config.toml file and save it as .pyodk_config.toml
 
 .pyodk_config.toml conf file must exists in Postgresql directory (ie /var/lib/postgresql/)
@@ -30,6 +32,14 @@ username = "my_username"
 password = "my_password"
 default_project_id = 5
 ```
+### Run the sql script on your own database
+```sh
+psql -f pl-pyODK.sql -U my_ser my_database
+```
+
+### Then you can jump to the SQL party below
+
+https://github.com/mathieubossaert/pl-pyodk#play-sql-queries-to-get-datas-from-central-and-do-whatever-you-want-with-it-in-your-own-database
 
 ## Using the docker image for test (only)
 ### Set pyODK config file
@@ -98,6 +108,6 @@ WITH last_submission_date AS (
 	)
 FROM last_submission_date
 ```
-The definition of the form used in the above example can be found here :
+The definition of the form used in the above example can also be found here :
 
-https://biodiversityforms.org/assets/files/ODKWaypoints-95fef9d5cc12bc1d91dca309fa53a242.xlsx
+https://biodiversityforms.org/docs/ODK-CEN/donnees_opportunistes/ODK_waypoints
