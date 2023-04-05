@@ -2,10 +2,11 @@ CREATE SCHEMA IF NOT EXISTS plpyodk;
 CREATE SCHEMA IF NOT EXISTS odk_central;
 CREATE OR REPLACE PROCEDURAL LANGUAGE plpython3u;
 
--- FUNCTION: plpyodk.get_filtered_complete_submissions(text, text, text)
+-- FUNCTION: plpyodk.get_complete_submissions_with_filter(text, text, text)
 
--- DROP FUNCTION IF EXISTS plpyodk.get_filtered_complete_submissions(text, text, text);
-CREATE OR REPLACE FUNCTION plpyodk.get_filtered_complete_submissions(
+-- DROP FUNCTION IF EXISTS plpyodk.get_complete_submissions_with_filter(text, text, text);
+
+CREATE OR REPLACE FUNCTION plpyodk.get_complete_submissions_with_filter(
 	project_id text,
 	form_id text,
 	filter text)
@@ -23,7 +24,11 @@ def fresh_data_only(pid, fid, path, filter, datas):
     if path == '':
         return None
 
-    url = 'projects/'+pid+'/forms/'+fid+'.svc/'+path+'?$filter='+filter
+    if not filter:
+        url = 'projects/'+pid+'/forms/'+fid+'.svc/'+path
+    else:
+        url = 'projects/'+pid+'/forms/'+fid+'.svc/'+path+'?$filter='+filter   
+
     if re.match(r"Submissions\?.*", path) or re.match(r".*\)$", path):
         tablename = 'submissions'
     else:
@@ -43,13 +48,13 @@ def fresh_data_only(pid, fid, path, filter, datas):
     else:
         datas[tablename]=value
 		
-    json_datas = str(json.dumps(datas, indent = 4))
-    #return json_datas
+    json_datas = str(json.dumps(datas))
     return json_datas.encode(encoding='utf-8').decode('unicode_escape')
 	
 return fresh_data_only(project_id, form_id, 'Submissions', filter, datas = {})
 
 $BODY$;
+
 
 -- FUNCTION: plpyodk.get_attachment_from_central(text, text, text, text, text)
 
@@ -83,7 +88,31 @@ save_attachment_to_file(project_id,	form_id, submission_id,	attachment,	destinat
 
 $BODY$;
 
--- FUNCTION: plpyodk.dynamic_pivot(text, text, refcursor)
+
+-- FUNCTION: plpyodk.update_form(text, text, text[])
+
+-- DROP FUNCTION IF EXISTS plpyodk.update_form(text, text, text[]);
+
+CREATE OR REPLACE FUNCTION plpyodk.update_form(
+	project_id text,
+	form_id text,
+	paths text[])
+    RETURNS text
+    LANGUAGE 'plpython3u'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+def update_form(pid, fid, attachments_paths):
+	from pyodk.client import Client
+	with Client(project_id=pid) as client:
+		client.forms.update(
+			form_id=fid,
+			attachments=attachments_paths)
+	
+return update_form(project_id, form_id, paths)
+
+$BODY$;
+
 
 -- DROP FUNCTION IF EXISTS plpyodk.dynamic_pivot(text, text, refcursor);
 
@@ -425,7 +454,7 @@ BEGIN
 EXECUTE format('DROP TABLE IF EXISTS '||destination_schema_name||'.'||form_id||';
 	CREATE TABLE IF NOT EXISTS '||destination_schema_name||'.'||form_id||' AS
 	SELECT key as tablename, (json_array_elements(value)) as json_data
-	FROM json_each(plpyodk.get_filtered_complete_submissions('''||project_id||'''::text, '''||form_id||'''::text,'''||criteria||'''::text)::json)
+	FROM json_each(plpyodk.get_complete_submissions_with_filter('''||project_id||'''::text, '''||form_id||'''::text,'''||criteria||'''::text)::json)
 ');
 
 EXECUTE format('SELECT plpyodk.feed_data_tables_from_central('''||destination_schema_name||''', '''||form_id||''', '''||geojson_columns||''');'
