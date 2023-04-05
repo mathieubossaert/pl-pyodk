@@ -16,7 +16,7 @@ RUN apt-get update \
 	   postgresql-15-cron \
 	   python3-pip \
       && rm -rf /var/lib/apt/lists/* \
-      && pip install pyodk
+      && pip install pyodk -e -U
 
 RUN localedef -i fr_FR -c -f UTF-8 -A /usr/share/locale/locale.alias fr_FR.UTF-8
 ENV LANG fr_FR.utf8
