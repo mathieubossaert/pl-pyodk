@@ -37,9 +37,8 @@ default_project_id = 5
 psql -f pl-pyODK.sql -U my_ser my_database
 ```
 
-### Then you can jump to the SQL party below
-
-https://github.com/mathieubossaert/pl-pyodk#play-sql-queries-to-get-datas-from-central-and-do-whatever-you-want-with-it-in-your-own-database
+### Then you can jump to the SQL party 
+[just below](https://github.com/mathieubossaert/pl-pyodk#play-sql-queries-to-get-datas-from-central-and-do-whatever-you-want-with-it-in-your-own-database)
 
 ## Using the docker image for test (only)
 ### Set pyODK config file
