@@ -28,7 +28,7 @@ def fresh_data_only(pid, fid, path, filter, datas):
         url = 'projects/'+pid+'/forms/'+fid+'.svc/'+path
     else:
         url = 'projects/'+pid+'/forms/'+fid+'.svc/'+path+'?$filter='+filter   
-
+    
     if re.match(r"Submissions\?.*", path) or re.match(r".*\)$", path):
         tablename = 'submissions'
     else:
@@ -38,8 +38,9 @@ def fresh_data_only(pid, fid, path, filter, datas):
     
     value = response.json()['value']
     
-    navigationlinks = re.findall(r'(\'\w+@odata\.navigationLink\'):\s+([^\}]+)', str(value))
-    for (key, link) in navigationlinks:
+    navigationlinks = re.findall(r'\'\w+@odata\.navigationLink\':\s+"([^"}]*)', str(value))
+    result = list(dict.fromkeys(navigationlinks))
+    for (link) in navigationlinks:
         link = link.replace("'", "'").replace('"','')
         fresh_data_only(project_id, form_id, link, '', datas)
     
