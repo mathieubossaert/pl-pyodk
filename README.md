@@ -10,9 +10,9 @@ A amount of bandwith and energy used to do it is consumed for "nothing".
 
 Thanks to [pyODK](https://getodk.github.io/pyodk/) and [pl/python](https://www.postgresql.org/docs/current/plpython.html) we can now ask central for the only data that are not already in our database, so maybe 30 or 40 submissions instead of 5000 ;-)
 
-pl/pyDOK replaces central2pg in this workflow :
+pl/pyDOK in this workflow :
 
-![central2pg_in_the_data_flow](https://user-images.githubusercontent.com/1642645/165459944-a8bfe56e-6cf3-410d-b337-70fe6d1e5ef3.png)
+![pl-pyODK_in_the_data_flow](./pl-pyODK_in_the_data_flow.png)
 
 ## Requirements
 ### pl/python langage installed on you databse
