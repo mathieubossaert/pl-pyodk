@@ -4,9 +4,15 @@
 
 [ODK Central](https://docs.getodk.org/central-intro/) gives all datas by default.
 We use [ODK Collect](https://docs.getodk.org/collect-intro/)every day to collect data that goes and is edited in our own [PostGIS](https://postgis.net) database.
-Each day we download hourly a lot of data that were already consolidated into our GIS. A amount of bandwith and energy used to to it is consumed for "nothing".
+Each day we download hourly a lot of data with [Central2pg](https://github.com/mathieubossaert/central2pg).
+It works really fine but most of the downloaded data has already been consolidated into our GIS database. We just need the last ones.
+A amount of bandwith and energy used to do it is consumed for "nothing".
 
 Thanks to [pyODK](https://getodk.github.io/pyodk/) and [pl/python](https://www.postgresql.org/docs/current/plpython.html) we can now ask central for the only data that are not already in our database, so maybe 30 or 40 submissions instead of 5000 ;-)
+
+pl/pyDOK replaces central2pg in this workflow :
+
+![central2pg_in_the_data_flow](https://user-images.githubusercontent.com/1642645/165459944-a8bfe56e-6cf3-410d-b337-70fe6d1e5ef3.png)
 
 ## Requirements
 ### pl/python langage installed on you databse
@@ -72,10 +78,10 @@ Test with the form you want from your central server :
 ```sql
 /*
 SELECT plpyodk.odk_central_to_pg(
-	5, 					-- the project id, 
+	5,					-- the project id, 
 	'waypoint',			-- form ID
 	'odk_central',		-- schema where to create tables and store data
-	'fite_to_use'		-- the filter "clause" used in the API call ex. '__system/submissionDate ge 2023-04-01'. Empty string ('') will get all the datas. 
+	'filter_to_use'		-- the filter "clause" used in the API call ex. '__system/submissionDate ge 2023-04-01'. Empty string ('') will get all the datas. 
 	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'	-- (geo)columns to ignore in json transformation to database attributes (geojson fields of GeoWidgets)
 );
 */
