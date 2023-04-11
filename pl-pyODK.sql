@@ -52,7 +52,7 @@ def fresh_data_only(pid, fid, path, filter, datas):
     json_datas = str(json.dumps(datas))
     return json_datas.encode(encoding='utf-8').decode('unicode_escape')
 	
-return fresh_data_only(project_id, form_id, 'Submissions', filter, datas = {})
+return fresh_data_only(project_id, form_id, 'Submissions', filter, datas = {}).replace('\n', '\\n')
 
 $BODY$;
 
