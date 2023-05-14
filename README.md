@@ -76,28 +76,39 @@ You can now connect to the database with your favorite client:
 Test with the form you want from your central server :
 
 ```sql
-/*
 SELECT plpyodk.odk_central_to_pg(
 	5,                  -- the project id, 
 	'waypoint',         -- form ID
 	'odk_central',      -- schema where to create tables and store data
-	'filter_to_use'     -- the filter "clause" used in the API call ex. '__system/submissionDate ge 2023-04-01'. Empty string ('') will get all the datas. 
+	'filter_to_use',    -- the filter "clause" used in the API call ex. '__system/submissionDate ge 2023-04-01'. Empty string ('') will get all the datas. 
 	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'	-- (geo)columns to ignore in json transformation to database attributes (geojson fields of GeoWidgets)
 );
-*/
+```
 
+Or try the example abose, wich make use of this form : https://biodiversityforms.org/docs/ODK-CEN/donnees_opportunistes/ODK_waypoints
+
+1. First upload it to you central server, note the project id (5 in our server), the form_id (waypoint), and the name of any "geo" question in the form (point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone)
+.
+2. Send some submissions to central.
+
+3. Now you are ready to make the first call, that will download all the data submittted for this form. The filter parametrer may be set to an empty string.
+
+```sql
 SELECT plpyodk.odk_central_to_pg(
-	5,                    -- the project id
+	3,                    -- the project id
 	'waypoint'::text,     -- form ID
 	'odk_central'::text,  -- schema where to create tables and store data
 	'',                   -- the filter "clause" used in the API call
-	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text -- (geo)columns to ignore in json
+	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text -- json (geo)columns to ignore
 );
-
--- And for example to view the data :
-
+```
+4. Check the data you got from central's database
+```sql
+SELECT * FROM odk_central.waypoint_submissions_data
 SELECT * FROM odk_central.waypoint_emplacements_data;
-
+```
+5. Now we can perform a query that uses last submission date (column "submissionDate") as a parameter in the function call.
+```sql```
 -- or this to get only datas collected since last known submissionDate in the database
 
 WITH last_submission_date AS (
@@ -113,6 +124,16 @@ WITH last_submission_date AS (
 	)
 FROM last_submission_date
 ```
-The definition of the form used in the above example can also be found here :
-
-https://biodiversityforms.org/docs/ODK-CEN/donnees_opportunistes/ODK_waypoints
+6. Send new submissions to central
+7. Run last query at the frequency you want, manually
+You can save your script in a sql file like **get_waypoint_data.sql** and then call it with psql :
+```sh
+psql -h localhost -p 5555 -U tester -f get_waypoint_data.sql -d field_data
+```
+8. Or you may want to define a cron task
+Adapt and add such a line to your cron list. See https://crontab.guru/ to learn about cron task scheduling.
+```bash
+crontab -e
+```
+For example, run the script every day at 18:00
+> 0 18 * * *  psql -h localhost -p 5555 -U tester -f get_waypoint_data.sql -d field_data
