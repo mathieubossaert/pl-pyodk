@@ -111,18 +111,20 @@ SELECT * FROM odk_central.waypoint_emplacements_data;
 ```sql
 -- or this to get only datas collected since last known submissionDate in the database
 
-WITH last_submission_date AS (
-		SELECT max("submissionDate")::text AS last_known 
-		FROM odk_central.waypoint_submissions_data
-	)
-	SELECT plpyodk.odk_central_to_pg(
-		5,
-		'waypoint'::text,
-		'odk_central'::text,
-		concat('__system/submissionDate ge ',last_known),
-		'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text
-	)
-FROM last_submission_date
+CREATE MATERIALIZED VIEW IF NOT EXISTS odk_central.waypoint_last_submission_date AS 
+	SELECT max("submissionDate")::text AS last_submission_date
+	FROM odk_central.waypoint_submissions_data;
+
+REFRESH MATERIALIZED VIEW odk_central.waypoint_last_submission_date;
+
+SELECT plpyodk.odk_central_to_pg(
+	5,
+	'waypoint'::text,
+	'odk_central'::text,
+	concat('__system/submissionDate ge ',last_submission_date),
+	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text
+)
+FROM odk_central.waypoint_last_submission_date;
 ```
 6. Send new submissions to central
 7. Run last query at the frequency you want, manually
