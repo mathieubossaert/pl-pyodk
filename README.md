@@ -77,7 +77,7 @@ Test with the form you want from your central server :
 
 ```sql
 SELECT plpyodk.odk_central_to_pg(
-	5,                  -- the project id, 
+	3,                  -- the project id, 
 	'waypoint',         -- form ID
 	'odk_central',      -- schema where to create tables and store data
 	'filter_to_use',    -- the filter "clause" used in the API call ex. '__system/submissionDate ge 2023-04-01'. Empty string ('') will get all the datas. 
@@ -118,7 +118,7 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS odk_central.waypoint_last_submission_date
 REFRESH MATERIALIZED VIEW odk_central.waypoint_last_submission_date;
 
 SELECT plpyodk.odk_central_to_pg(
-	5,
+	3,
 	'waypoint'::text,
 	'odk_central'::text,
 	concat('__system/submissionDate ge ',last_submission_date),
