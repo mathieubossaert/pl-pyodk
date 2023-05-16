@@ -108,7 +108,7 @@ SELECT * FROM odk_central.waypoint_submissions_data
 SELECT * FROM odk_central.waypoint_emplacements_data;
 ```
 5. Now we can perform a query that uses last submission date (column "submissionDate") as a parameter in the function call.
-```sql```
+```sql
 -- or this to get only datas collected since last known submissionDate in the database
 
 WITH last_submission_date AS (
