@@ -18,8 +18,8 @@ RUN apt-get update \
       && rm -rf /var/lib/apt/lists/* \
       && pip install pyodk
 
-RUN localedef -i fr_FR -c -f UTF-8 -A /usr/share/locale/locale.alias fr_FR.UTF-8
-ENV LANG fr_FR.utf8
+#RUN localedef -i fr_FR -c -f UTF-8 -A /usr/share/locale/locale.alias fr_FR.UTF-8
+#ENV LANG fr_FR.utf8
 
 COPY ./.pyodk_config.toml /var/lib/postgresql/.pyodk_config.toml
 COPY ./pl-pyODK.sql /var/lib/postgresql/pl-pyODK.sql

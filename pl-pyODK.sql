@@ -210,7 +210,7 @@ DECLARE
   _sql_new_cols   text = '';
   _row       record;
 BEGIN
- RAISE INFO 'starting create_table_from_refcursor() for table %',_table_name; 
+ RAISE INFO 'starting create_table_from_refcursor() for table %',lower(_table_name); 
     FETCH FIRST FROM _ref INTO _row;
     SELECT _sql_val || '
            (' ||
@@ -219,7 +219,7 @@ BEGIN
         INTO _sql_val
     FROM JSON_EACH(TO_JSON(_row)) val;
   _sql = '
-          CREATE TABLE IF NOT EXISTS ' || _schema_name ||'.'|| _table_name || '
+          CREATE TABLE IF NOT EXISTS ' || _schema_name ||'.'|| lower(_table_name) || '
           ' || _sql_val;
           
 -- RAISE INFO 'SQL script for table cration %',_sql; 
@@ -227,20 +227,20 @@ BEGIN
 	
 	/* adding new columns if table already exixts */
 	SELECT _sql_new_cols || 
-           STRING_AGG(concat('ALTER TABLE ' , _schema_name ,'.', _table_name , ' ADD COLUMN IF NOT EXISTS "',val.key :: text,'" text'), ';') ||';'
+           STRING_AGG(concat('ALTER TABLE ' , _schema_name ,'.', lower(_table_name) , ' ADD COLUMN IF NOT EXISTS "',val.key :: text,'" text'), ';') ||';'
         INTO _sql_new_cols
     FROM JSON_EACH(TO_JSON(_row)) val
 	WHERE val.key NOT IN ( SELECT attname 
  FROM pg_class JOIN pg_attribute ON pg_attribute.attrelid=pg_class.oid
  JOIN pg_namespace ON relnamespace = pg_namespace.oid
  WHERE nspname = _schema_name
-   AND relkind = 'r' AND pg_class.relname = _table_name AND attnum > 0 AND attname = val.key
-) AND plpyodk.does_table_exists(_schema_name, _table_name);
+   AND relkind = 'r' AND pg_class.relname = lower(_table_name) AND attnum > 0 AND attname = val.key
+) AND plpyodk.does_table_exists(_schema_name, lower(_table_name));
 -- Create new attributes or Run a dummy query if nothing new
--- RAISE INFO 'SQL script for new cols %',_sql_new_cols; 
+RAISE INFO 'SQL script for new cols %',_sql_new_cols; 
     EXECUTE (COALESCE(_sql_new_cols,'SELECT true;')); 
- RAISE INFO 'exiting from  create_table_from_refcursor() for table %',_table_name; 
--- RAISE INFO 'create_table_from_refcursor(): SQL statement is: %', COALESCE(_sql_new_cols,'no new column to add');
+ RAISE INFO 'exiting from  create_table_from_refcursor() for table %',lower(_table_name); 
+RAISE INFO 'create_table_from_refcursor(): SQL statement is: %', COALESCE(_sql_new_cols,'no new column to add');
 END;
 $BODY$;
 
@@ -303,7 +303,7 @@ BEGIN
   _sql_val = TRIM(TRAILING ',' FROM _sql_val);
   _sql_col = TRIM(TRAILING ',' FROM _sql_col);
   _sql = '
-          INSERT INTO ' || _schema_name || '.' || _table_name || '(' || _sql_col || ')
+          INSERT INTO ' || _schema_name || '.' || lower(_table_name) || '(' || _sql_col || ')
           VALUES ' || _sql_val ||' ON CONFLICT (data_id) DO NOTHING;';
 	
 	EXECUTE (_sql);
@@ -329,7 +329,6 @@ COMMENT ON FUNCTION plpyodk.insert_into_from_refcursor(text, text, refcursor)
 	
 	returning :
 	void';
-
 
 
 -- FUNCTION: plpyodk.feed_data_tables_from_central(text, text, text)
