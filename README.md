@@ -73,7 +73,7 @@ You can now connect to the database with your favorite client:
 
 ### Play SQL queries to get datas from Central and do whatever you want with it in your own database.
 
-Test with the form you want from your central server :
+Test with the form you want on your central server :
 
 ```sql
 SELECT plpyodk.odk_central_to_pg(
@@ -87,7 +87,7 @@ SELECT plpyodk.odk_central_to_pg(
 
 Or try the example abose, wich make use of this form : https://biodiversityforms.org/docs/ODK-CEN/donnees_opportunistes/ODK_waypoints
 
-1. First upload it to you central server, note the project id (5 in our server), the form_id (waypoint), and the name of any "geo" question in the form (point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone)
+1. First upload it to you central server, note the project id (3 in our instance), the form_id (waypoint), and the name of each "geo" question in the form in order to not explore its json value (point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone)
 .
 2. Send some submissions to central.
 
@@ -137,5 +137,5 @@ Adapt and add such a line to your cron list. See https://crontab.guru/ to learn 
 ```bash
 crontab -e
 ```
-For example, run the script every day at 18:00
+For example, to run the script every day at 18:00, add this line to the crontab :
 > 0 18 * * *  psql -h localhost -p 5555 -U tester -f get_waypoint_data.sql -d field_data
