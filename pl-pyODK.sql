@@ -452,13 +452,13 @@ CREATE OR REPLACE FUNCTION plpyodk.odk_central_to_pg(
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 BEGIN
-EXECUTE format('DROP TABLE IF EXISTS '||destination_schema_name||'.'||form_id||';
-	CREATE TABLE IF NOT EXISTS '||destination_schema_name||'.'||form_id||' AS
+EXECUTE format('DROP TABLE IF EXISTS '||destination_schema_name||'.'||split_part(form_id,'/draft',1)||';
+	CREATE TABLE IF NOT EXISTS '||destination_schema_name||'.'||split_part(form_id,'/draft',1)||' AS
 	SELECT key as tablename, (json_array_elements(value)) as json_data
 	FROM json_each(plpyodk.get_complete_submissions_with_filter('''||project_id||'''::text, '''||form_id||'''::text,'''||criteria||'''::text)::json)
 ');
 
-EXECUTE format('SELECT plpyodk.feed_data_tables_from_central('''||destination_schema_name||''', '''||form_id||''', '''||geojson_columns||''');'
+EXECUTE format('SELECT plpyodk.feed_data_tables_from_central('''||destination_schema_name||''', '''||split_part(form_id,'/draft',1)||''', '''||geojson_columns||''');'
 );
 END;
 $BODY$;

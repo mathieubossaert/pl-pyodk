@@ -115,33 +115,6 @@ return update_form(project_id, form_id, paths)
 $BODY$;
 
 
--- FUNCTION: plpyodk.update_form(text, text, text[])
-
--- DROP FUNCTION IF EXISTS plpyodk.update_form(text, text, text[]);
-
-CREATE OR REPLACE FUNCTION plpyodk.update_form(
-	project_id text,
-	form_id text,
-	paths text[])
-    RETURNS text
-    LANGUAGE 'plpython3u'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
-AS $BODY$
-def update_form(pid, fid, attachments_paths):
-	from pyodk.client import Client
-	with Client(project_id=pid) as client:
-		client.forms.update(
-			form_id=fid,
-			attachments=attachments_paths)
-	
-return update_form(project_id, form_id, paths)
-
-$BODY$;
-
-
--- FUNCTION: plpyodk.dynamic_pivot(text, text, refcursor)
-
 -- DROP FUNCTION IF EXISTS plpyodk.dynamic_pivot(text, text, refcursor);
 
 CREATE OR REPLACE FUNCTION plpyodk.dynamic_pivot(
@@ -215,6 +188,7 @@ COMMENT ON FUNCTION plpyodk.dynamic_pivot(text, text, refcursor)
 		refcursor';
 
 
+
 -- FUNCTION: plpyodk.create_table_from_refcursor(text, text, refcursor)
 
 -- DROP FUNCTION IF EXISTS plpyodk.create_table_from_refcursor(text, text, refcursor);
@@ -282,7 +256,6 @@ COMMENT ON FUNCTION plpyodk.create_table_from_refcursor(text, text, refcursor)
 	
 	returning :
 	void';
-
 
 -- FUNCTION: plpyodk.insert_into_from_refcursor(text, text, refcursor)
 
@@ -358,6 +331,7 @@ COMMENT ON FUNCTION plpyodk.insert_into_from_refcursor(text, text, refcursor)
 	void';
 
 
+
 -- FUNCTION: plpyodk.feed_data_tables_from_central(text, text, text)
 
 -- DROP FUNCTION IF EXISTS plpyodk.feed_data_tables_from_central(text, text, text);
@@ -430,7 +404,6 @@ query := 'select DISTINCT tablename	FROM '||schema_name||'.'||form_id;
 END;
 $BODY$;
 
-
 -- FUNCTION: plpyodk.does_table_exists(text, text)
 
 -- DROP FUNCTION IF EXISTS plpyodk.does_table_exists(text, text);
@@ -479,13 +452,13 @@ CREATE OR REPLACE FUNCTION plpyodk.odk_central_to_pg(
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
 BEGIN
-EXECUTE format('DROP TABLE IF EXISTS '||destination_schema_name||'.'||form_id||';
-	CREATE TABLE IF NOT EXISTS '||destination_schema_name||'.'||form_id||' AS
+EXECUTE format('DROP TABLE IF EXISTS '||destination_schema_name||'.'||split_part(form_id,'/draft',1)||';
+	CREATE TABLE IF NOT EXISTS '||destination_schema_name||'.'||split_part(form_id,'/draft',1)||' AS
 	SELECT key as tablename, (json_array_elements(value)) as json_data
 	FROM json_each(plpyodk.get_complete_submissions_with_filter('''||project_id||'''::text, '''||form_id||'''::text,'''||criteria||'''::text)::json)
 ');
 
-EXECUTE format('SELECT plpyodk.feed_data_tables_from_central('''||destination_schema_name||''', '''||form_id||''', '''||geojson_columns||''');'
+EXECUTE format('SELECT plpyodk.feed_data_tables_from_central('''||destination_schema_name||''', '''||split_part(form_id,'/draft',1)||''', '''||geojson_columns||''');'
 );
 END;
 $BODY$;
