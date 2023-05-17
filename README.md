@@ -3,7 +3,7 @@
 -> for example from last submission_date known in the database
 
 [ODK Central](https://docs.getodk.org/central-intro/) gives all datas by default.
-We use [ODK Collect](https://docs.getodk.org/collect-intro/)every day to collect data that goes and is edited in our own [PostGIS](https://postgis.net) database.
+We use [ODK Collect](https://docs.getodk.org/collect-intro/) every day to collect data that goes and is edited in our own [PostGIS](https://postgis.net) database.
 Each day we download hourly a lot of data with  [Central2pg](https://github.com/mathieubossaert/central2pg).
 It works really fine but most of the downloaded data has already been consolidated into our GIS database. We just need the last ones.
 
