@@ -4,9 +4,8 @@
 
 [ODK Central](https://docs.getodk.org/central-intro/) gives all datas by default.
 We use [ODK Collect](https://docs.getodk.org/collect-intro/)every day to collect data that goes and is edited in our own [PostGIS](https://postgis.net) database.
-Each day we download hourly a lot of data with [Central2pg](https://github.com/mathieubossaert/central2pg).
+Each day we download hourly a lot of data with  [Central2pg](https://github.com/mathieubossaert/central2pg).
 It works really fine but most of the downloaded data has already been consolidated into our GIS database. We just need the last ones.
-A amount of bandwith and energy used to do it is consumed for "nothing".
 
 Thanks to [pyODK](https://getodk.github.io/pyodk/) and [pl/python](https://www.postgresql.org/docs/current/plpython.html) we can now ask central for the only data that are not already in our database, so maybe 30 or 40 submissions instead of 5000 ;-)
 
