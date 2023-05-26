@@ -1,5 +1,5 @@
 # pl-pyODK
-## First version of functions that automatically get data from ODK central using a filter
+## First version of functions that pull data from ODK central using a filter and automatically creates table in your PostgreSQL database
 -> for example from last submission_date known in the database
 
 [ODK Central](https://docs.getodk.org/central-intro/) gives all datas by default.
@@ -18,6 +18,8 @@ pl/pyDOK in this workflow :
 ```sql
 CREATE OR REPLACE PROCEDURAL LANGUAGE plpython3u;
 ```
+## Installation
+
 ### Install pyodk library on the database host
 
 On the database server
@@ -138,3 +140,24 @@ crontab -e
 ```
 For example, to run the script every day at 18:00, add this line to the crontab :
 > 0 18 * * *  psql -h localhost -p 5555 -U tester -f get_waypoint_data.sql -d field_data
+
+## Show datas on a map with QGIS
+### View creation
+```sql
+CREATE VIEW waypoints AS 
+SELECT places.data_id, date_heure, mail_observateur as email, nom_observateur, etiquette, heure_localite, 
+st_force2d(st_geomfromgeojson(replace(COALESCE(ligne, point, point_auto_10, point_auto_15, point_auto_5, polygone),'\','')))::geometry(geometry, 4326) AS geom, prise_image, remarque
+FROM odk_central.waypoint_submissions_data submissions JOIN  odk_central.waypoint_emplacements_data places ON places."__Submissions-id" = submissions."__id"
+```
+
+### Configure the PostGIS datasource in QGIS
+
+![QGIS_datasource_definition](./QGIS_datasource_definition.png)
+
+### Connect and add the publi.waypoints "layer" to the canvas
+
+![load_waypoints_view_to_the_canvas.png](./load_waypoints_view_to_the_canvas.png)
+
+![see_waypoints_on_the_map](./see_waypoints_on_the_map.png)
+
+### rerun steps 6 and 7 the refresh the QGIS canvas ;-)
