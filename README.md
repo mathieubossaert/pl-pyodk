@@ -141,7 +141,7 @@ crontab -e
 For example, to run the script every day at 18:00, add this line to the crontab :
 > 0 18 * * *  psql -h localhost -p 5555 -U tester -f get_waypoint_data.sql -d field_data
 
-## Show datas on a map with QGIS
+## How to show datas on a map with QGIS
 ### View creation
 ```sql
 CREATE VIEW waypoints AS 
@@ -154,10 +154,10 @@ FROM odk_central.waypoint_submissions_data submissions JOIN  odk_central.waypoin
 
 ![QGIS_datasource_definition](./QGIS_datasource_definition.png)
 
-### Connect and add the publi.waypoints "layer" to the canvas
+### Connect and add the public.waypoints view as a "layer" to the canvas
 
 ![load_waypoints_view_to_the_canvas.png](./load_waypoints_view_to_the_canvas.png)
 
 ![see_waypoints_on_the_map](./see_waypoints_on_the_map.png)
 
-### rerun steps 6 and 7 the refresh the QGIS canvas ;-)
+### rerun steps 6 and 7 then refresh the QGIS canvas ;-)
