@@ -1,36 +1,36 @@
 # pl-pyODK
-## First version of functions that pull data from ODK Central, even using a filter, and automatically creates dedicated tables in your PostgreSQL database
--> for example from last submission_date known in the database
+## Première version de fonctions qui extraient des données d'ODK Central, même en utilisant un filtre, et qui créent automatiquement des tables dédiées dans votre base de données PostgreSQL.
+-> par exemple les données soumises depuis la dernière date de soumission connue en base (seulement les nouvelles données)
 
-[ODK Central](https://docs.getodk.org/central-intro/) returns all datas by default.
-We use [ODK Collect](https://docs.getodk.org/collect-intro/) every day to collect data that goes and is edited in our own [PostGIS](https://postgis.net) database.
-Each day we download hourly a lot of data with  [Central2pg](https://github.com/mathieubossaert/central2pg).
-It works really fine but most of the downloaded data has already been consolidated into our GIS database. We just need the last ones.
+[ODK Central](https://docs.getodk.org/central-intro/) retourne toutes les données par défaut.
+Nous utilisons [ODK Collect](https://docs.getodk.org/collect-intro/) tous les jours pour collecter des données qui vont et sont éditées dans notre propre base de données [PostGIS](https://postgis.net).
+Chaque jour, nous téléchargeons toutes les heures un grand nombre de données avec [Central2pg](https://github.com/mathieubossaert/central2pg).
+Cela fonctionne très bien, mais la plupart des données téléchargées ont déjà été consolidées dans notre base de données SIG. Nous n'avons besoin que des données nouvellement créées.
 
-Thanks to [pyODK](https://getodk.github.io/pyodk/) and [pl/python](https://www.postgresql.org/docs/current/plpython.html) we can now ask central for the only data that are not already in our database, so maybe 30 or 40 submissions instead of 5000 ;-)
+Grâce à [pyODK](https://getodk.github.io/pyodk/) et [pl/python](https://www.postgresql.org/docs/current/plpython.html) nous pouvons maintenant demander à Central les seules données qui ne sont pas déjà dans notre base de données, donc peut-être 30 ou 40 soumissions au lieu de 5000 ;-)
 
-pl/pyDOK in the workflow :
+pl/pyDOK dans la chaine de traitements :
 
 ![pl-pyODK_in_the_data_flow](./pl-pyODK_in_the_data_flow.png)
 
-## Requirements
-### pl/python langage installed on you database
+## Prérequis
+### pl/python doit être installé dans votre base de données
 ```sql
 CREATE OR REPLACE PROCEDURAL LANGUAGE plpython3u;
 ```
 ## Installation
 
-### Install pyodk library on the database host
+### Installer la librairie pyodk sur l'hôte de votre serveur de base de données
 
-On the  host of the database server
+Sur votre serveur
 ```sh
 pip install -U pyodk
 ```
-### Set pyODK config file
+### Paramétrer le fichier de configuration de pyodk
 
-Edit the .template_pyodk_config.toml file and save it as .pyodk_config.toml
+Editer le fichier .template_pyodk_config.toml et l'enregistrer en tant que .pyodk_config.toml
 
-.pyodk_config.toml conf file must exists in Postgresql directory (ie /var/lib/postgresql/)
+le fichier .pyodk_config.toml doit exister dans le répertoire de Postgresql (ie /var/lib/postgresql/)
 
 
 ```toml
@@ -40,41 +40,41 @@ username = "my_username"
 password = "my_password"
 default_project_id = 5
 ```
-### Run the sql script on your own database
+### Exécuter le script sql dans votre base de données
 ```sh
 psql -f pl-pyODK.sql -U my_ser my_database
 ```
 
-### Then you can jump to the SQL party 
-[just below](https://github.com/mathieubossaert/pl-pyodk#play-sql-queries-to-get-datas-from-central-and-do-whatever-you-want-with-it-in-your-own-database)
+### Maintenant vous pouvez passer à la fête SQL
+[ci-dessous](https://github.com/mathieubossaert/pl-pyodk#play-sql-queries-to-get-datas-from-central-and-do-whatever-you-want-with-it-in-your-own-database)
 
-## Using the docker image for test (only)
+## Utilisation de l'image docker pour tests (uniquement)
 ### Set pyODK config file
 
 ```sh
 cd docker_postgis_curl_plpython_pgcron
 ```
 
-Edit the .template_pyodk_config.toml file and save it as .pyodk_config.toml
+Editer le fichier .template_pyodk_config.toml et l'enegistrer en tant que .pyodk_config.toml
 
-### Build and run the container
+### Construire et lancer le conteneur (Build and run)
 
 ```sh
 sudo docker build -t postgis:test_pyodk .
 sudo docker run --restart="always" --dns 1.1.1.1 --name test_plpyodk -e POSTGRES_DB=field_data -e POSTGRES_USER=tester -e POSTGRES_PASSWORD=testerpwd -d -p 5555:5432 postgis:test_pyodk
 ```
-### Connect to the database
+### Connection à la base de données
 
-You can now connect to the database with your favorite client:
+Vous pouvez maintenant vous connecter à la base de données avec votre client préféré :
 * host = **localhost**
 * port = 5555
 * user = **tester**
 * password = **testerpwd**
 * dbname = **field_data**
 
-### Play SQL queries to get datas from Central and do whatever you want with it in your own database.
+### Executez des requêtes SQL pour récupérer des données de Central et faites en ce que vous voudrez dans votre propre base de données..
 
-Test with the form you want on your central server :
+Testez avec le formuliare de votre choix sur votre serveur ODK Central :
 
 ```sql
 SELECT plpyodk.odk_central_to_pg(
