@@ -1,3 +1,4 @@
+[french version here](README_FR.md)
 # pl-pyODK
 ## First version of functions that pull data from ODK Central, even using a filter, and automatically creates dedicated tables in your PostgreSQL database
 -> for example from last submission_date known in the database
@@ -86,13 +87,13 @@ SELECT plpyodk.odk_central_to_pg(
 );
 ```
 
-Or try the example abose, wich make use of this form : https://biodiversityforms.org/docs/ODK-CEN/donnees_opportunistes/ODK_waypoints
+Or try the example above, which make use of this form : https://biodiversityforms.org/docs/ODK-CEN/donnees_opportunistes/ODK_waypoints
 
-1. First upload it to you central server, note the project id (3 in our instance), the form_id (waypoint), and the name of each "geo" question in the form in order to not explore its json value (point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone)
+1. First upload it to you central server, note the project id (3 in our instance), the form_id (waypoint), and the name of each "geo" question in the form (point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone)
 .
 2. Send some submissions to central.
 
-3. Now you are ready to make the first call, that will download all the data submittted for this form. The filter parametrer may be set to an empty string.
+3. Now you are ready to make the first call, that will download all the data submitted for this form. The filter parameter may be set to an empty string.
 
 ```sql
 SELECT plpyodk.odk_central_to_pg(
@@ -103,14 +104,14 @@ SELECT plpyodk.odk_central_to_pg(
 	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text -- json (geo)columns to ignore
 );
 ```
-4. Check the data you got from central's database
+4. Check the data you got from Central
 ```sql
 SELECT * FROM odk_central.waypoint_submissions_data
 SELECT * FROM odk_central.waypoint_emplacements_data;
 ```
 5. Now we can perform a query that uses last submission date (column "submissionDate") as a parameter in the function call.
 ```sql
--- or this to get only datas collected since last known submissionDate in the database
+-- or this to get only data collected since last known submissionDate in the database
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS odk_central.waypoint_last_submission_date AS 
 	SELECT max("submissionDate")::text AS last_submission_date
@@ -134,14 +135,14 @@ You can save your script in a sql file like **get_waypoint_data.sql** and then c
 psql -h localhost -p 5555 -U tester -f get_waypoint_data.sql -d field_data
 ```
 8. Or you may want to define a cron task
-Adapt and add such a line to your cron list. See https://crontab.guru/ to learn about cron task scheduling.
+Adapt and add a line as above to your cron list. See https://crontab.guru/ to learn about cron task scheduling.
 ```bash
 crontab -e
 ```
 For example, to run the script every day at 18:00, add this line to the crontab :
 > 0 18 * * *  psql -h localhost -p 5555 -U tester -f get_waypoint_data.sql -d field_data
 
-## How to show datas on a map with QGIS
+## How to show data on a map with QGIS
 ### View creation
 ```sql
 CREATE VIEW waypoints AS 

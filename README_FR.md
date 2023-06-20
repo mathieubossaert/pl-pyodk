@@ -1,5 +1,7 @@
+[english version here](README.md)
 # pl-pyODK
-## Première version de fonctions qui extraient des données d'ODK Central, même en utilisant un filtre, et qui créent automatiquement des tables dédiées dans votre base de données PostgreSQL.
+## Transformer automatiquement les données de vos formulaitres en tables au sein de votre propre base de données.
+Ceci est une première version d'un ensemble de fonctions permettant d'extraire les données d'ODK Central, acceptant un filtre, et qui créent automatiquement des tables dédiées dans votre base de données PostgreSQL.
 -> par exemple les données soumises depuis la dernière date de soumission connue en base (seulement les nouvelles données)
 
 [ODK Central](https://docs.getodk.org/central-intro/) retourne toutes les données par défaut.
@@ -74,7 +76,7 @@ Vous pouvez maintenant vous connecter à la base de données avec votre client p
 
 ### Executez des requêtes SQL pour récupérer des données de Central et faites en ce que vous voudrez dans votre propre base de données..
 
-Testez avec le formuliare de votre choix sur votre serveur ODK Central :
+Testez avec le formulaire de votre choix sur votre serveur ODK Central :
 
 ```sql
 SELECT plpyodk.odk_central_to_pg(
@@ -86,13 +88,13 @@ SELECT plpyodk.odk_central_to_pg(
 );
 ```
 
-Or try the example abose, wich make use of this form : https://biodiversityforms.org/docs/ODK-CEN/donnees_opportunistes/ODK_waypoints
+Ou essayez l'exemple ci-dessus, qui utilise cette forme : https://biodiversityforms.org/docs/ODK-CEN/donnees_opportunistes/ODK_waypoints
 
-1. First upload it to you central server, note the project id (3 in our instance), the form_id (waypoint), and the name of each "geo" question in the form in order to not explore its json value (point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone)
+1. Téléchargez-le d'abord sur votre serveur central, notez l'identifiant du projet (3 dans notre cas), l'identifiant du formulaire (waypoint), et le nom de chaque question "géographique" dans le formulaire (point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone)
 .
-2. Send some submissions to central.
+2. Envoyer quelques soumissions à Central.
 
-3. Now you are ready to make the first call, that will download all the data submittted for this form. The filter parametrer may be set to an empty string.
+3. Vous êtes maintenant prêt à effectuer le premier appel, qui téléchargera toutes les données soumises pour ce formulaire. Le paramètre "filter" peut être défini comme une chaîne vide.
 
 ```sql
 SELECT plpyodk.odk_central_to_pg(
@@ -103,14 +105,14 @@ SELECT plpyodk.odk_central_to_pg(
 	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text -- json (geo)columns to ignore
 );
 ```
-4. Check the data you got from central's database
+4. Vérifiez les données reçues de Central
 ```sql
 SELECT * FROM odk_central.waypoint_submissions_data
 SELECT * FROM odk_central.waypoint_emplacements_data;
 ```
-5. Now we can perform a query that uses last submission date (column "submissionDate") as a parameter in the function call.
+5. Nous pouvons maintenant effectuer une requête qui utilise la date de la dernière soumission (colonne "submissionDate") comme paramètre dans l'appel de la fonction.
 ```sql
--- or this to get only datas collected since last known submissionDate in the database
+-- ou ceci pour obtenir uniquement les données collectées depuis la dernière date de soumission connue dans la base de données
 
 CREATE MATERIALIZED VIEW IF NOT EXISTS odk_central.waypoint_last_submission_date AS 
 	SELECT max("submissionDate")::text AS last_submission_date
@@ -127,22 +129,22 @@ SELECT plpyodk.odk_central_to_pg(
 )
 FROM odk_central.waypoint_last_submission_date;
 ```
-6. Send new submissions to central
-7. Run last query at the frequency you want, manually
-You can save your script in a sql file like **get_waypoint_data.sql** and then call it with psql :
+6. Envoyer les nouvelles soumissions à Central
+7. Exécuter la dernière requête à la fréquence que vous souhaitez, manuellement
+Vous pouvez enregistrer votre script dans un fichier sql comme **get_waypoint_data.sql** et l'appeler ensuite avec psql :
 ```sh
 psql -h localhost -p 5555 -U tester -f get_waypoint_data.sql -d field_data
 ```
-8. Or you may want to define a cron task
-Adapt and add such a line to your cron list. See https://crontab.guru/ to learn about cron task scheduling.
+8. Vous pouvez également définir une tâche planifiée (cron)
+Adapter et ajouter une ligne comme ci-dessus à votre cron tab. Consultez le site https://crontab.guru/ pour en savoir plus sur la planification des tâches cron.
 ```bash
 crontab -e
 ```
-For example, to run the script every day at 18:00, add this line to the crontab :
+Par exemple, pour exécuter le script tous les jours à 18h00, ajoutez cette ligne à votre crontab :
 > 0 18 * * *  psql -h localhost -p 5555 -U tester -f get_waypoint_data.sql -d field_data
 
-## How to show datas on a map with QGIS
-### View creation
+## Comment afficher des données sur une carte avec QGIS
+### Création de vues
 ```sql
 CREATE VIEW waypoints AS 
 SELECT places.data_id, date_heure, mail_observateur as email, nom_observateur, etiquette, heure_localite, 
@@ -150,14 +152,14 @@ st_force2d(st_geomfromgeojson(replace(COALESCE(ligne, point, point_auto_10, poin
 FROM odk_central.waypoint_submissions_data submissions JOIN  odk_central.waypoint_emplacements_data places ON places."__Submissions-id" = submissions."__id"
 ```
 
-### Configure the PostGIS datasource in QGIS
+### Configurer la source de données PostGIS dans QGIS
 
 ![QGIS_datasource_definition](./QGIS_datasource_definition.png)
 
-### Connect and add the public.waypoints view as a "layer" to the canvas
+### Connecter et ajouter la vue public.waypoints en tant que "couche" au canevas
 
 ![load_waypoints_view_to_the_canvas.png](./load_waypoints_view_to_the_canvas.png)
 
 ![see_waypoints_on_the_map](./see_waypoints_on_the_map.png)
 
-### rerun steps 6 and 7 then refresh the QGIS canvas ;-)
+### Exécutez à nouveau les étapes 6 et 7 puis rafraîchir le canevas QGIS ;-)
