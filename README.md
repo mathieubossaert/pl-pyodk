@@ -22,7 +22,7 @@ pl/pyDOK in the workflow :
 # How to use it
 You have two options : 
 1. install pl-pyODK and its requirements on your database -> [here](https://github.com/mathieubossaert/pl-pyodk#1-use-it-within-your-existing-server)
-2. Or use the docker image (for testing purpose only) -> [here](https://github.com/mathieubossaert/pl-pyodk#2-use-the-docker-image-for-test-only)
+2. Or use the docker image (for testing purpose only) -> [there](https://github.com/mathieubossaert/pl-pyodk#2-use-the-docker-image-for-test-only)
 
 ## 1. Use it within your existing server
 
