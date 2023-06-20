@@ -2,7 +2,7 @@
 
 > **Warning**
 > Cet ensemble de fonctions n'est pas un projet de getODK, mais un projet personnel. Les équipes d'ODK n'apporterons pas de support à leur sujet.
-> Merci de poster d'utiliser Github pour échanger sur les besoins ou les difficultées que vous rencontrerez dans leur utilisation
+> Merci de d'utiliser Github pour échanger sur les besoins ou les difficultées que vous rencontrerez dans leur utilisation
 
 # pl-pyODK
 ## Transformer automatiquement les données de vos formulaires ODK en tables au sein de votre propre base de données.
