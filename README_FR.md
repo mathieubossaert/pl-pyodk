@@ -22,8 +22,8 @@ pl/pyDOK dans la chaine de traitements :
 
 # Comment l'utiliser
 Vous avez deux options : 
-1. Installer pl-pyODK et ses pré-requis sur votre base de données
-2. Ou utiliser l'image docker (à des fins de test uniquement)
+1. Installer pl-pyODK et ses pré-requis sur votre base de données -> [ici](https://github.com/mathieubossaert/pl-pyodk/blob/main/README_FR.md#1-utilisation-sur-votre-propre-serveur)
+2. Ou utiliser l'image docker (à des fins de test uniquement) -> [là](https://github.com/mathieubossaert/pl-pyodk/blob/main/README_FR.md#2-utilisation-de-limage-docker-pour-tests-uniquement)
 
 ## 1. Utilisation sur votre propre serveur
 
