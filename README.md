@@ -19,20 +19,27 @@ pl/pyDOK in the workflow :
 
 ![pl-pyODK_in_the_data_flow](./pl-pyODK_in_the_data_flow.png)
 
-## Requirements
-### pl/python langage installed on you database
+# How to use it
+You have two options : 
+1. install pl-pyODK and its requirements on your database
+2. Or use the docker image (for testing purpose only)
+
+## 1. Use it within your existing server
+
+### Requirements
+#### pl/python langage installed on you database
 ```sql
 CREATE OR REPLACE PROCEDURAL LANGUAGE plpython3u;
 ```
-## Installation
+### Installation
 
-### Install pyodk library on the database host
+#### Install pyodk library on the database host
 
 On the  host of the database server
 ```sh
 pip install -U pyodk
 ```
-### Set pyODK config file
+#### Set pyODK config file
 
 Edit the .template_pyodk_config.toml file and save it as .pyodk_config.toml
 
@@ -46,15 +53,15 @@ username = "my_username"
 password = "my_password"
 default_project_id = 5
 ```
-### Run the sql script on your own database
+#### Run the sql script on your own database
 ```sh
 psql -f pl-pyODK.sql -U my_ser my_database
 ```
 
-### Then you can jump to the SQL party 
+#### Then you can jump to the SQL party 
 [just below](https://github.com/mathieubossaert/pl-pyodk#play-sql-queries-to-get-datas-from-central-and-do-whatever-you-want-with-it-in-your-own-database)
 
-## Using the docker image for test (only)
+## 2. Use the docker image for test (only)
 ### Set pyODK config file
 
 ```sh
