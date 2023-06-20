@@ -1,4 +1,8 @@
-[english version here](README.md)
+[English version here](README.md)
+> **Warning**
+> Cet ensemble de fonctions n'est pas un projet de getODK, mais un projet personnel. Les équipes d'ODK n'apporterons pas de support à leur sujet.
+> Merci de poster d'utiliser Github pour échanger sur les besoins ou les difficultées que vous rencontrerez dans leur utilisation
+
 # pl-pyODK
 ## Transformer automatiquement les données de vos formulaires ODK en tables au sein de votre propre base de données.
 Ceci est une première version d'un ensemble de fonctions permettant d'extraire les données d'ODK Central, acceptant un filtre, et qui créent automatiquement des tables dédiées dans votre base de données PostgreSQL.
@@ -179,3 +183,5 @@ FROM odk_central.waypoint_submissions_data submissions JOIN  odk_central.waypoin
 ![see_waypoints_on_the_map](./see_waypoints_on_the_map.png)
 
 ### Exécutez à nouveau les étapes 6 et 7 puis rafraîchir le canevas QGIS ;-)
+
+[English version here](README.md)

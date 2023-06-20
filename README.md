@@ -1,4 +1,8 @@
-[french version here](README_FR.md)
+[French version here](README_FR.md)
+> **Warning**
+> This set of functions is not a getODK project, but a personal one. The ODK teams will not provide support for them.
+> Please post on Github to discuss any needs or difficulties you may encounter in using them.
+
 # pl-pyODK
 ## First version of functions that pull data from ODK Central, even using a filter, and automatically creates dedicated tables in your PostgreSQL database
 -> for example from last submission_date known in the database
