@@ -104,6 +104,20 @@ SELECT plpyodk.odk_central_to_pg(
 	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text -- json (geo)columns to ignore
 );
 ```
+This will automatically :
+
+ * ask Central for the data that correspond to the filter
+ * get the data
+ * create the tables to stores those data in the schema "odk_data" (one table for the submissions and one for each repeat group.
+ * the last parameter lists the question to ignore in json exploration recusrion (geowidgets columns)
+ * feed those tables with the retrieved data
+
+And at next call :
+
+ * check for new questions in the form
+ * then create the attributes in the table for the new questions
+ * insert new data
+
 4. Check the data you got from Central
 ```sql
 SELECT * FROM odk_central.waypoint_submissions_data

@@ -1,6 +1,6 @@
 [english version here](README.md)
 # pl-pyODK
-## Transformer automatiquement les données de vos formulaitres en tables au sein de votre propre base de données.
+## Transformer automatiquement les données de vos formulaires ODK en tables au sein de votre propre base de données.
 Ceci est une première version d'un ensemble de fonctions permettant d'extraire les données d'ODK Central, acceptant un filtre, et qui créent automatiquement des tables dédiées dans votre base de données PostgreSQL.
 -> par exemple les données soumises depuis la dernière date de soumission connue en base (seulement les nouvelles données)
 
@@ -105,6 +105,22 @@ SELECT plpyodk.odk_central_to_pg(
 	'point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone'::text -- json (geo)columns to ignore
 );
 ```
+
+Cela va automatiquement :
+
+ * demander à Central les soumissions du formulaire correpondant au filtre (si filtre)
+ * obtenir les données
+ * créer les tables correspondant aux soumissions et au "repeat group" dans le schéma "odk_data" de ma base de données. Un attribut texte par question du formulaire pour stocker ces données 
+ * le dernier paramètre liste la question à ignorer dans la récusrion de l'exploration json (colonnes geowidgets)
+ * alimenter ces tables avec les données récupérées
+
+Et au prochain appel :
+
+ * Vérifier la présence de nouvelles questions dans le formulaire
+ * les créer dans les tables le cas échéant si nécessaire
+ * insérer les nouvelles données (seulement celles non encore présente)
+
+
 4. Vérifiez les données reçues de Central
 ```sql
 SELECT * FROM odk_central.waypoint_submissions_data
