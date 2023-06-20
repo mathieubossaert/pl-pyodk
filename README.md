@@ -1,4 +1,5 @@
 [French version here](README_FR.md)
+
 > **Warning**
 > This set of functions is not a getODK project, but a personal one. The ODK teams will not provide support for them.
 > Please post on Github to discuss any needs or difficulties you may encounter in using them.
@@ -180,3 +181,5 @@ FROM odk_central.waypoint_submissions_data submissions JOIN  odk_central.waypoin
 ![see_waypoints_on_the_map](./see_waypoints_on_the_map.png)
 
 ### rerun steps 6 and 7 then refresh the QGIS canvas ;-)
+
+[French version here](README_FR.md)
