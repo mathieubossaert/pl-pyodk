@@ -48,7 +48,7 @@ psql -f pl-pyODK.sql -U my_ser my_database
 ```
 
 ### Maintenant vous pouvez passer à la fête SQL
-[ci-dessous](https://github.com/mathieubossaert/pl-pyodk#play-sql-queries-to-get-datas-from-central-and-do-whatever-you-want-with-it-in-your-own-database)
+[ci-dessous](https://github.com/mathieubossaert/pl-pyodk/blob/main/README_FR.md#executez-des-requ%C3%AAtes-sql-pour-r%C3%A9cup%C3%A9rer-des-donn%C3%A9es-de-central-et-faites-en-ce-que-vous-voudrez-dans-votre-propre-base-de-donn%C3%A9es)
 
 ## Utilisation de l'image docker pour tests (uniquement)
 ### Set pyODK config file
