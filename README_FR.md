@@ -74,7 +74,7 @@ Vous pouvez maintenant vous connecter à la base de données avec votre client p
 * password = **testerpwd**
 * dbname = **field_data**
 
-### Executez des requêtes SQL pour récupérer des données de Central et faites en ce que vous voudrez dans votre propre base de données..
+### Executez des requêtes SQL pour récupérer des données de Central et faites en ce que vous voudrez dans votre propre base de données.
 
 Testez avec le formulaire de votre choix sur votre serveur ODK Central :
 
