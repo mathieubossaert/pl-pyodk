@@ -100,7 +100,7 @@ SELECT plpyodk.odk_central_to_pg(
 );
 ```
 
-Ou essayez l'exemple ci-dessus, qui utilise cette forme : https://biodiversityforms.org/docs/ODK-CEN/donnees_opportunistes/ODK_waypoints
+Ou essayez l'exemple ci-dessus, qui utilise ce formulaire : https://biodiversityforms.org/docs/ODK-CEN/donnees_opportunistes/ODK_waypoints
 
 1. Téléchargez-le d'abord sur votre serveur central, notez l'identifiant du projet (3 dans notre cas), l'identifiant du formulaire (waypoint), et le nom de chaque question "géographique" dans le formulaire (point_auto_5,point_auto_10,point_auto_15,point,ligne,polygone)
 .
