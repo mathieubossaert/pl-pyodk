@@ -35,7 +35,8 @@ def fresh_data_only(pid, fid, path, filter, datas):
         tablename = path.rsplit('/')[-1]    
     
     response = client.get(url)
-    
+    response.raise_for_status()
+
     value = response.json()['value']
     
     navigationlinks = re.findall(r'\'\w+@odata\.navigationLink\':\s+"([^"}]*)', str(value))
@@ -81,7 +82,8 @@ def save_attachment_to_file(pid, fid, sid, attachment, dest_path):
     url ='projects/'+pid+'/forms/'+fid+'/Submissions/'+sid+'/attachments/'+attachment
     print(url)
     response = client.get(url)
-
+    response.raise_for_status()
+    
     with open(dest_path, "wb") as out_file:
         out_file.write(response.content)
     
@@ -360,7 +362,8 @@ query := 'select DISTINCT tablename	FROM '||schema_name||'.'||form_id;
 	EXECUTE format('SELECT exists(select 1 FROM %1$s.%2$s WHERE tablename = ''%3$s'') ', schema_name, form_id, t.tablename)
 	INTO non_empty;
 		IF non_empty THEN 
-		RAISE INFO 'entering feed_data_tables_from_central for table %', t.tablename; 
+		RAISE INFO '
+-> Entering feed_data_tables_from_central for table % :', t.tablename; 
 		EXECUTE format('DROP TABLE IF EXISTS data_table;
 			CREATE TABLE data_table(tablename text, data_id text, key text, value json);
 			INSERT INTO  data_table(tablename, data_id, key, value) 
@@ -394,7 +397,9 @@ query := 'select DISTINCT tablename	FROM '||schema_name||'.'||form_id;
 									SELECT plpyodk.insert_into_from_refcursor('''||schema_name||''','''||form_id||'_'||t.tablename||'_data'', ''curseur_central'');
 									CLOSE "curseur_central"'
 							  );	
-				RAISE INFO 'exiting from feed_data_tables_from_central for table %', t.tablename; 
+				RAISE INFO '
+-> exiting from feed_data_tables_from_central for table %.
+', t.tablename; 
 
 		ELSE
 			RAISE INFO 'table % is empty !', t.tablename; 
@@ -445,7 +450,7 @@ CREATE OR REPLACE FUNCTION plpyodk.odk_central_to_pg(
 	destination_schema_name text,
 	criteria text,
 	geojson_columns text)
-    RETURNS void
+    RETURNS boolean
     LANGUAGE 'plpgsql'
     COST 100
     VOLATILE PARALLEL UNSAFE
@@ -457,7 +462,12 @@ EXECUTE format('DROP TABLE IF EXISTS '||destination_schema_name||'.'||split_part
 	FROM json_each(plpyodk.get_complete_submissions_with_filter('''||project_id||'''::text, '''||form_id||'''::text,'''||criteria||'''::text)::json)
 ');
 
+RAISE INFO '
+Datas pulled from Central. Let''s feed the dedicated tables...
+'; 
+
 EXECUTE format('SELECT plpyodk.feed_data_tables_from_central('''||destination_schema_name||''', '''||split_part(form_id,'/draft',1)||''', '''||geojson_columns||''');'
 );
+RETURN true;
 END;
 $BODY$;
