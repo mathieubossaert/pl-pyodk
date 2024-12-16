@@ -44,7 +44,7 @@ pip install -U pyodk
 
 Editer le fichier .template_pyodk_config.toml et l'enregistrer en tant que .pyodk_config.toml
 
-le fichier .pyodk_config.toml doit exister dans le répertoire de Postgresql (ie /var/lib/postgresql/)
+Le fichier .pyodk_config.toml doit exister dans le répertoire de Postgresql (ie /var/lib/postgresql/)
 
 
 ```toml
@@ -128,7 +128,7 @@ Cela va automatiquement :
 
 Et au prochain appel :
 
- * Vérifier la présence de nouvelles questions dans le formulaire
+ * vérifier la présence de nouvelles questions dans le formulaire
  * les créer dans les tables le cas échéant si nécessaire
  * insérer les nouvelles données (seulement celles non encore présente)
 
@@ -157,14 +157,14 @@ SELECT plpyodk.odk_central_to_pg(
 )
 FROM odk_central.waypoint_last_submission_date;
 ```
-6. Envoyer les nouvelles soumissions à Central
-7. Exécuter la dernière requête à la fréquence que vous souhaitez, manuellement
+6. Envoyez les nouvelles soumissions à Central
+7. Exécutez la dernière requête à la fréquence que vous souhaitez, manuellement
 Vous pouvez enregistrer votre script dans un fichier sql comme **get_waypoint_data.sql** et l'appeler ensuite avec psql :
 ```sh
 psql -h localhost -p 5555 -U tester -f get_waypoint_data.sql -d field_data
 ```
 8. Vous pouvez également définir une tâche planifiée (cron)
-Adapter et ajouter une ligne comme ci-dessus à votre cron tab. Consultez le site https://crontab.guru/ pour en savoir plus sur la planification des tâches cron.
+Adaptez et ajoutez une ligne comme ci-dessus à votre cron tab. Consultez le site https://crontab.guru/ pour en savoir plus sur la planification des tâches cron.
 ```bash
 crontab -e
 ```
