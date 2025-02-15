@@ -1,20 +1,25 @@
-FROM postgres:15
+#
+# NOTE: adapted from https://github.com/postgis/docker-postgis/blob/master/17-3.5/Dockerfile
+#
+FROM postgres:17-bullseye
 
-ENV POSTGIS_MAJOR 3
-ENV POSTGIS_VERSION 3.3.2+dfsg-1.pgdg110+1
+ENV POSTGIS_MAJOR=3
+ENV POSTGIS_VERSION=3.5.2+dfsg-1.pgdg110+1
 
 RUN apt-get update \
       && apt-cache showpkg postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
       && apt-get install -y --no-install-recommends \
-      	   postgresql-15-ogr-fdw \
+           # ca-certificates: for accessing remote raster files;
+           #   fix: https://github.com/postgis/docker-postgis/issues/307
+           ca-certificates \
            postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR=$POSTGIS_VERSION \
-           postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts=$POSTGIS_VERSION \
-           make gcc g++ wget \
-           postgresql-server-dev-$PG_MAJOR \
-           libcurl4-openssl-dev \
-	   postgresql-plpython3-15 \
-	   postgresql-15-cron \
-	   python3-pip \
+           postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts \
+      # make gcc g++ wget \
+      # postgresql-server-dev-$PG_MAJOR \
+      # libcurl4-openssl-dev \
+      postgresql-plpython3-17 \
+      #postgresql-17-cron \
+      python3-pip \
       && rm -rf /var/lib/apt/lists/* \
       && pip install pyodk
 
