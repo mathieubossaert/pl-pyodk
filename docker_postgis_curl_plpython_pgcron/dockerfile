@@ -9,23 +9,13 @@ ENV POSTGIS_VERSION=3.5.2+dfsg-1.pgdg110+1
 RUN apt-get update \
       && apt-cache showpkg postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
       && apt-get install -y --no-install-recommends \
-           # ca-certificates: for accessing remote raster files;
-           #   fix: https://github.com/postgis/docker-postgis/issues/307
            ca-certificates \
            postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR=$POSTGIS_VERSION \
            postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts \
-      # make gcc g++ wget \
-      # postgresql-server-dev-$PG_MAJOR \
-      # libcurl4-openssl-dev \
       postgresql-plpython3-17 \
-      #postgresql-17-cron \
       python3-pip \
       && rm -rf /var/lib/apt/lists/* \
       && pip install pyodk
-
-#RUN localedef -i fr_FR -c -f UTF-8 -A /usr/share/locale/locale.alias fr_FR.UTF-8
-#ENV LANG fr_FR.utf8
-
 COPY ./.pyodk_config.toml /var/lib/postgresql/.pyodk_config.toml
 COPY ./pl-pyODK.sql /var/lib/postgresql/pl-pyODK.sql
 
