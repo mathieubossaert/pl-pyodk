@@ -3,8 +3,6 @@ DROP FUNCTION IF EXISTS plpyodk.projects_list();
 CREATE OR REPLACE FUNCTION plpyodk.projects_list()
     RETURNS json[]
     LANGUAGE 'plpython3u'
-    COST 100
-    VOLATILE PARALLEL UNSAFE
 AS $BODY$
 	import json
 	from pyodk.client import Client
