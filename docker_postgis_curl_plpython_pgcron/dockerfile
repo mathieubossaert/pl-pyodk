@@ -1,23 +1,24 @@
 #
 # NOTE: adapted from https://github.com/postgis/docker-postgis/blob/master/17-3.5/Dockerfile
 #
-FROM postgres:17-bullseye
-
-ENV POSTGIS_MAJOR=3
-ENV POSTGIS_VERSION=3.5.2+dfsg-1.pgdg110+1
+FROM postgres:17-bookworm
 
 RUN apt-get update \
-      && apt-cache showpkg postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
       && apt-get install -y --no-install-recommends \
            ca-certificates \
-           postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR=$POSTGIS_VERSION \
-           postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts \
       postgresql-plpython3-17 \
+      postgresql-postgis \
       python3-pip \
-      && rm -rf /var/lib/apt/lists/* \
-      && pip install pyodk
+      && rm -rf /var/lib/apt/lists/*
+      
 COPY ./.pyodk_config.toml /var/lib/postgresql/.pyodk_config.toml
 COPY ./pl-pyODK.sql /var/lib/postgresql/pl-pyODK.sql
+
+# to "solve" "error: externally-managed-environment"
+# -> https://www.jeffgeerling.com/blog/2023/how-solve-error-externally-managed-environment-when-installing-pip3
+RUN rm /usr/lib/python3.11/EXTERNALLY-MANAGED
+
+RUN pip install pyodk
 
 RUN mkdir -p /docker-entrypoint-initdb.d
 COPY ./initdb-postgis.sh /docker-entrypoint-initdb.d/10_postgis.sh
