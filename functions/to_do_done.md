@@ -21,7 +21,7 @@
 
 ## Entities
 [x] create(label, data, entity_list_name=None, project_id=None, uuid=None)
-[] create_many(data, entity_list_name=None, project_id=None, create_source=None, source_size=None)
+[x] create_many(data, entity_list_name=None, project_id=None, create_source=None, source_size=None)
 [x] delete(uuid, entity_list_name=None, project_id=None)
 [] get_table(entity_list_name=None, project_id=None, skip=None, top=None, count=None, filter=None, select=None)
 [] list(entity_list_name=None, project_id=None)
