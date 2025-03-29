@@ -20,9 +20,9 @@
 [] update(form_id, project_id=None, definition=None, attachments=None, version_updater=None)
 
 ## Entities
-[] create(label, data, entity_list_name=None, project_id=None, uuid=None)
+[x] create(label, data, entity_list_name=None, project_id=None, uuid=None)
 [] create_many(data, entity_list_name=None, project_id=None, create_source=None, source_size=None)
-[] delete(uuid, entity_list_name=None, project_id=None)
+[x] delete(uuid, entity_list_name=None, project_id=None)
 [] get_table(entity_list_name=None, project_id=None, skip=None, top=None, count=None, filter=None, select=None)
 [] list(entity_list_name=None, project_id=None)
 [] merge(data, entity_list_name=None, project_id=None, match_keys=None, add_new_properties=True, update_matched=True, delete_not_matched=False, source_label_key='label', source_keys=None, create_source=None, source_size=None)
