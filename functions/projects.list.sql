@@ -20,6 +20,6 @@ $BODY$;
 COMMENT ON FUNCTION plpyodk.projects_list() IS 'returns an json array of each project description';
 
 /*
-Voir comment surcharger les paramètres de connexion à Central pour contacvte rune autre serveur avec d'autres identifiant *
-avec utilisation des lavalurs par défaut du fichier de conf .toml
+Voir comment surcharger les paramètres de connexion à Central pour contacter un autre serveur avec d'autres identifiants
+que ceux du serveur par défaut définis dans le fichier de conf .toml
 /*

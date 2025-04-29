@@ -23,7 +23,7 @@ BEGIN
     FETCH FIRST FROM _ref INTO _row;
     SELECT _sql_val || '
            (' ||
-           STRING_AGG(concat('"',val.key :: text,'" text', CASE WHEN val.key = 'data_id' THEN ' UNIQUE' ELSE NULL::text END), ',') ||
+           STRING_AGG(concat('"',val.key :: text,'" text', CASE WHEN val.key = 'data_id' THEN ' PRIMARY KEY' ELSE NULL::text END), ',') ||
            ')'
         INTO _sql_val
     FROM JSON_EACH(TO_JSON(_row)) val;
