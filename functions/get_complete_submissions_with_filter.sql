@@ -11,6 +11,19 @@ CREATE OR REPLACE FUNCTION plpyodk.get_complete_submissions_with_filter(
     COST 100
     VOLATILE PARALLEL UNSAFE
 AS $BODY$
+import collections.abc
+
+def update(d):
+    for k, v in d.items():
+        if isinstance(v, collections.abc.Mapping):
+            d[k] = update(v)
+        else:
+            if isinstance(v, str):
+                d[k] = v.replace('"', '')
+            else:
+                d[k] = v
+    return d
+	
 def fresh_data_only(pid, fid, path, filter, datas):
     from pyodk.client import Client
     import re
@@ -33,7 +46,7 @@ def fresh_data_only(pid, fid, path, filter, datas):
     response = client.get(url)
     response.raise_for_status()
 
-    value = response.json()['value']
+    value = [update(elem) for elem in response.json()['value']]
     
     navigationlinks = re.findall(r'\'\w+@odata\.navigationLink\':\s+"([^"}]*)', str(value))
     result = list(dict.fromkeys(navigationlinks))
