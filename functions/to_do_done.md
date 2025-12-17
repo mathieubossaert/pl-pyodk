@@ -1,4 +1,6 @@
 ## Projects
+-> https://getodk.github.io/pyodk/projects/
+
 [] create_app_users(display_names, forms=None, project_id=None)
 
 [x] get(project_id=None)
@@ -6,6 +8,8 @@
 [x] list()
 
 ## Submissions
+-> https://getodk.github.io/pyodk/submissions/
+
 [] add_comment(instance_id, comment, project_id=None, form_id=None)
 
 [] create(xml, form_id=None, project_id=None, device_id=None, encoding='utf-8')
@@ -17,11 +21,15 @@
 [wip] get_table(form_id=None, project_id=None, table_name='Submissions', skip=None, top=None, count=None, wkt=None, filter=None, expand=None, select=None)
 [x] list(form_id=None, project_id=None)
 
+[] list(form_id=None, project_id=None)
+
 [x] list_comments(instance_id, form_id=None, project_id=None)
 
 [] review(instance_id, review_state, form_id=None, project_id=None, comment=None)
 
 ## Forms
+-> https://getodk.github.io/pyodk/forms/
+
 [] create(definition, attachments=None, ignore_warnings=True, form_id=None, project_id=None)
 
 [] get(form_id, project_id=None)
@@ -31,6 +39,8 @@
 [] update(form_id, project_id=None, definition=None, attachments=None, version_updater=None)
 
 ## Entities
+-> https://getodk.github.io/pyodk/entities/
+
 [x] create(label, data, entity_list_name=None, project_id=None, uuid=None)
 
 [x] create_many(data, entity_list_name=None, project_id=None, create_source=None, source_size=None)
@@ -45,7 +55,9 @@
 
 [] update(uuid, entity_list_name=None, project_id=None, label=None, data=None, force=None, base_version=None) 
 
-## Entity Lists¶
+## Entity Lists
+-> https://getodk.github.io/pyodk/entity_lists/
+
 [] create(approval_required=False, entity_list_name=None, project_id=None)
 
 [] get(entity_list_name=None, project_id=None)
